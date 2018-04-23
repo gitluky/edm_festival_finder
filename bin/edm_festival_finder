@@ -5,4 +5,4 @@ require 'nokogiri'
 require 'open-uri'
 require 'pry'
 
-puts "welcome to edm festival finder"
+EdmFestivalFinder::CLI.new.call
