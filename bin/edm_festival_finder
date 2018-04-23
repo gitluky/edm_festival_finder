@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require_relative '../lib/edm_festival_finder'
+require 'nokogiri'
+require 'open-uri'
+require 'pry'
+
+puts "welcome to edm festival finder"
