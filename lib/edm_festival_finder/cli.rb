@@ -23,16 +23,19 @@ class EdmFestivalFinder::CLI
       input = gets.strip
     end
     self.choose_country
-    self.get_festivals
-    self.display_festivals
-    self.choose_festivals
-    self.festival_details
+    if self.get_festivals
+      self.display_festivals
+      self.choose_festivals
+      self.festival_details
+    else
+      puts "There are no festivals found in the selected country within a year from now."
+    end
   end
 
   def choose_country
     country_hash = EdmFestivalFinder::Scraper.scrape_countries
     country_hash.each do
-      |country,code| puts " #{code} - #{country}"}
+      |country,code| puts " #{code} - #{country}"
     end
     puts "Enter the country code for the country of choice listed above"
     self.country_code = gets.strip
@@ -43,9 +46,10 @@ class EdmFestivalFinder::CLI
   end
 
   def get_festivals
-    EdmFestivalFinder::Festival.create_from_search(EdmFestivalFinder::Scraper.scrape_festivals(self.country_code))
-    EdmFestivalFinder::Festival.add_additional_details(EdmFestivalFinder::Scraper.scrape_individual_festivals(self.country_code))
-    self.display_festivals
+    EdmFestivalFinder::Festival.create_from_search(EdmFestivalFinder::Scraper.scrape_festivals(self.country_code, self.startedate, self.enddate))
+    EdmFestivalFinder::Festival.all.each do |festival|
+      EdmFestivalFinder::Festival.add_additional_details(EdmFestivalFinder::Scraper.scrape_individual_festivals(festival.individual_page))
+    end
   end
 
   def display_festivals
