@@ -37,12 +37,14 @@ class EdmFestivalFinder::Scraper
   end
 
 
-  def scrape_individual_festivals(festival)
-    doc = Nokogiri::HTML(open("#{festival.individual_page}"))
-    festival.environment = doc.css("col-xs-auto.col-sm-auto.nopadding.disc").text,
-    festival.type_of_event = doc.css(".col-xs-auto.col-sm-auto.nopadding.nomarginright.disc").text,
-    festival.link = doc.css(".col-xs-12.nopadding.eventlinks.link a").attribute("href").value,
-    festival.facebook = doc.css(".col-xs-12.nopadding.link").attribute("href").value
+  def scrape_individual_festivals(individual_page)
+    doc = Nokogiri::HTML(open("#{individual_page}"))
+    festival_detail_hash = {
+      environment: doc.css("col-xs-auto.col-sm-auto.nopadding.disc").text,
+      type_of_event: doc.css(".col-xs-auto.col-sm-auto.nopadding.nomarginright.disc").text,
+      link: doc.css(".col-xs-12.nopadding.eventlinks.link a").attribute("href").value,
+      facebook: doc.css(".col-xs-12.nopadding.link").attribute("href").value
+    }
   end
 
 end

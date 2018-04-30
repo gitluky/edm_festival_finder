@@ -46,7 +46,7 @@ class EdmFestivalFinder::CLI
       self.choose_country
     else
       EdmFestivalFinder::Festival.all.each do |festival|
-        scrape_individual_festivals(festival)
+        scrape_individual_festivals(festival.individual_page)
       end
     end
     self.display_festivals
@@ -74,14 +74,14 @@ class EdmFestivalFinder::CLI
     elsif self.festival_num == 'exit'
       puts "Thank you for using EDM Festival Finder, Goodbye."
     else
-      self.festival_num = self.festival_num.to_i
+      self.festival_num = self.festival_num.to_i - 1
     end
   end
 
   def festival_details
     puts "name: #{EdmFestivalFinder::Festival.all[self.festival_num].name}"
     puts "country: #{EdmFestivalFinder::Festival.all[self.festival_num].country}"
-    puts "date: #{EdmFestivalFinder::Festival.all[self.festival_num].date}"
+    puts "date: #{EdmFestivalFinder::Festival.all[self.festival_num].startdate} - #{EdmFestivalFinder::Festival.all[self.festival_num].enddate}"
     puts "confirmed acts: #{EdmFestivalFinder::Festival.all[self.festival_num].confirmed_acts}"
     puts "attendance: #{EdmFestivalFinder::Festival.all[self.festival_num].attendance}"
     puts "environment: #{EdmFestivalFinder::Festival.all[self.festival_num].environment}"
