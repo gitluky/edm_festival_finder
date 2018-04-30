@@ -22,14 +22,7 @@ class EdmFestivalFinder::CLI
     while input != "\n"
       input = gets.strip
     end
-    self.choose_country
-    if self.get_festivals
-      self.display_festivals
-      self.choose_festivals
-      self.festival_details
-    else
-      puts "There are no festivals found in the selected country within a year from now."
-    end
+    choose_country
   end
 
   def choose_country
@@ -43,13 +36,20 @@ class EdmFestivalFinder::CLI
       puts "Country code was not invalid, please re-enter."
       self.country_code = gets.strip
     end
+    self.get_festivals
   end
 
   def get_festivals
     EdmFestivalFinder::Festival.create_from_search(EdmFestivalFinder::Scraper.scrape_festivals(self.country_code, self.startedate, self.enddate))
-    EdmFestivalFinder::Festival.all.each do |festival|
-      EdmFestivalFinder::Festival.add_additional_details(EdmFestivalFinder::Scraper.scrape_individual_festivals(festival.individual_page))
+    if EdmFestivalFinder::Festival.all == []
+      puts "No festivals found in the selected country."
+      self.choose_country
+    else
+      EdmFestivalFinder::Festival.all.each do |festival|
+        scrape_individual_festivals(festival)
+      end
     end
+    self.display_festivals
   end
 
   def display_festivals
@@ -59,26 +59,30 @@ class EdmFestivalFinder::CLI
       puts "{i}. #{festival.name}"
       puts "  #{festival.location}, #{festival.startdate} - #{festival.enddate}"
     end
+    self.choose_festivals
   end
 
   def choose_festival
     puts "Enter the number for the festival to see more details or type 'back' or 'exit'"
     self.festival_num = gets.strip
-    while !input.between?(1,self.festival_count) || input != 'back' || input != 'exit'
+    while !self.festival_num.between?(1,self.festival_count) || input != 'back' || input != 'exit'
       puts "Please re-enter the number, or type 'back' or 'exit'"
     end
-    if input == 'back'
+    if self.festival_num == 'back'
       EdmFestivalFinder::Festival.all.reset_all
       choose_country
-    else
+    elsif self.festival_num == 'exit'
       puts "Thank you for using EDM Festival Finder, Goodbye."
+    else
+      self.festival_num = self.festival_num.to_i
     end
   end
 
   def festival_details
     puts "name: #{EdmFestivalFinder::Festival.all[self.festival_num].name}"
-    puts "location: #{EdmFestivalFinder::Festival.all[self.festival_num].location}"
+    puts "country: #{EdmFestivalFinder::Festival.all[self.festival_num].country}"
     puts "date: #{EdmFestivalFinder::Festival.all[self.festival_num].date}"
+    puts "confirmed acts: #{EdmFestivalFinder::Festival.all[self.festival_num].confirmed_acts}"
     puts "attendance: #{EdmFestivalFinder::Festival.all[self.festival_num].attendance}"
     puts "environment: #{EdmFestivalFinder::Festival.all[self.festival_num].environment}"
     puts "type of event: #{EdmFestivalFinder::Festival.all[self.festival_num].type_of_event}"
