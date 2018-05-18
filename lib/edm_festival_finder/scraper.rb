@@ -6,7 +6,7 @@
 
 class EdmFestivalFinder::Scraper
 
-  def self.scrape_countries #scrapes and creates a hash { country: code, ...} from the dropdown list of countries on the website
+  def self.scrape_countries    #scrapes and creates a hash { country: code, ...} from the dropdown list of countries on the website
     url = "http://www.electronic-festivals.com"
     doc = Nokogiri::HTML(open(url))
     country_hash = {}
@@ -16,7 +16,7 @@ class EdmFestivalFinder::Scraper
     country_hash
   end
 
-  def self.scrape_festivals(country_code, start_date, end_date)#uses arguments as filters in the URL, creates an array and inserts hashes for each festival scraped from the search results on the page
+  def self.scrape_festivals(country_code, start_date, end_date)   #uses arguments as filters in the URL, creates an array and inserts hashes for each festival scraped from the search results on the page
     start_date = start_date.gsub("-","")
     end_date = end_date.gsub("-","")
     array_of_festivals = []
@@ -39,7 +39,7 @@ class EdmFestivalFinder::Scraper
   end
 
 
-  def self.scrape_individual_festivals(individual_page)#takes a festival's individual page URL, scrapes the page and creates a hash
+  def self.scrape_individual_festivals(individual_page)   #takes a festival's individual page URL, scrapes the page and creates a hash
     doc = Nokogiri::HTML(open("#{individual_page}"))
     if !doc.css(".col-xs-12.nopadding.eventlinks.link a").empty?
       link = doc.css(".col-xs-12.nopadding.eventlinks.link a").attribute("href").value
