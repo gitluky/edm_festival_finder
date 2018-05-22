@@ -1,4 +1,4 @@
-# UNCOMMENT DEPENDENCIES TO RUN TEST ON THE LAST LINE
+#UNCOMMENT DEPENDENCIES TO RUN TEST ON THE LAST LINE
 # require 'nokogiri'
 # require 'open-uri'
 # require 'pry'
@@ -59,4 +59,4 @@ class EdmFestivalFinder::Scraper
 end
 
 #//test//
-#puts EdmFestivalFinder::Scraper.new.scrape_festivals("us", Date.today.to_s.gsub("-",""), Date.today.next_year.to_s.gsub("-",""))
+#puts EdmFestivalFinder::Scraper.scrape_festivals("us", Date.today.to_s.gsub("-",""), Date.today.next_year.to_s.gsub("-",""))
