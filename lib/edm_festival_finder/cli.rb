@@ -96,8 +96,8 @@ class EdmFestivalFinder::CLI
     puts "Attendance: #{EdmFestivalFinder::Festival.all[self.festival_num].attendance}"
     puts "Environment: #{EdmFestivalFinder::Festival.all[self.festival_num].environment}"
     puts "Type of event: #{EdmFestivalFinder::Festival.all[self.festival_num].type_of_event}"
-    puts "Link #{EdmFestivalFinder::Festival.all[self.festival_num].link}"
-    puts "Facebook #{EdmFestivalFinder::Festival.all[self.festival_num].facebook}"
+    puts "Link: #{EdmFestivalFinder::Festival.all[self.festival_num].link}"
+    puts "Facebook: #{EdmFestivalFinder::Festival.all[self.festival_num].facebook}"
     puts ""
     puts "Type 'back' to go to the festival list or 'exit'"
     input = gets.strip
