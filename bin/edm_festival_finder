@@ -3,6 +3,5 @@
 require_relative '../lib/edm_festival_finder'
 require 'nokogiri'
 require 'open-uri'
-require 'pry'
 
 EdmFestivalFinder::CLI.new.call
