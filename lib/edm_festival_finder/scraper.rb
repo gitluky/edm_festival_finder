@@ -1,9 +1,3 @@
-#UNCOMMENT DEPENDENCIES TO RUN TEST ON THE LAST LINE
-# require 'nokogiri'
-# require 'open-uri'
-# require 'pry'
-# require_relative '../edm_festival_finder'
-
 class EdmFestivalFinder::Scraper
 
   def self.scrape_countries    #scrapes and creates a hash { country: code, ...} from the dropdown list of countries on the website
@@ -11,7 +5,7 @@ class EdmFestivalFinder::Scraper
     doc = Nokogiri::HTML(open(url))
     country_hash = {}
     doc.css(".location_auto_country option").each do |country|
-      country_hash["#{country.text.to_sym}"]=country.attribute("value").value
+      country_hash[country.text.to_sym]=country.attribute("value").value
     end
     country_hash
   end
@@ -57,6 +51,3 @@ class EdmFestivalFinder::Scraper
   end
 
 end
-
-#//test//
-#puts EdmFestivalFinder::Scraper.scrape_festivals("us", Date.today.to_s.gsub("-",""), Date.today.next_year.to_s.gsub("-",""))

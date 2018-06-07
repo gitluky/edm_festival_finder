@@ -33,8 +33,9 @@ class EdmFestivalFinder::CLI
     if block_given?
       yield(no_results)     #puts "No results found..." when get_festivals is called and there are no concerts found for the country"
     end
-    puts "Enter the country code for the country of choice listed above"    #prompts user to enter country code
+    puts "Enter the country code for the country of choice listed above or type 'back' or 'exit'"    #prompts user to enter country code
     self.country_code = gets.strip    #sets @country_code to input
+    self.back_or_exit(self.country_code, 1)
     while country_hash.none? {|country,code| self.country_code == code}     #re-prompts if the country code until the country code is one from the list provided
       puts "Country code was not invalid, please re-enter."
       self.country_code = gets.strip    #resets @country_code to correct input
@@ -76,21 +77,14 @@ class EdmFestivalFinder::CLI
     #at this point user will be able to input back or exit
     puts "Enter the number for the festival to see more details or type 'back' or 'exit'"
     self.festival_num = gets.strip
-    while self.festival_num != 'back' && self.festival_num != 'exit'
-      while !self.festival_num.to_i.between?(1,self.festival_count)
-        puts "Please re-enter the number, or type 'back' or 'exit'"
-        self.festival_num = gets.strip
-      end
+    self.back_or_exit(self.festival_num, 2)
+    while !self.festival_num.to_i.between?(1,self.festival_count)
+      puts "Please re-enter the number, or type 'back' or 'exit'"
+      self.festival_num = gets.strip
+      self.back_or_exit(self.festival_num, 2)
     end
-    if self.festival_num == 'back'
-      EdmFestivalFinder::Festival.reset_all
-      choose_country
-    elsif self.festival_num == 'exit'
-      puts "Thank you for using EDM Festival Finder, Goodbye."
-    else
-      self.festival_num = self.festival_num.to_i - 1
-      self.festival_details
-    end
+    self.festival_num = self.festival_num.to_i - 1
+    self.festival_details
   end
 
   def festival_details    #puts out the festival instance variables of EdmFestivalFinder::Festival.all[@festival_num]
@@ -107,13 +101,22 @@ class EdmFestivalFinder::CLI
     puts ""
     puts "Type 'back' to go to the festival list or 'exit'"
     input = gets.strip
-    while input != 'back' && input != 'exit'
-      input = gets.strip
-    end
+    self.back_or_exit(input, 3)
+  end
+
+  def back_or_exit(input, go_to = 1)
     if input == 'back'
-      display_festivals
-    else
+      if go_to == 1
+        self.call
+      elsif go_to == 2
+        EdmFestivalFinder::Festival.reset_all
+        choose_country
+      elsif go_to == 3
+        display_festivals
+      end
+    elsif input == 'exit'
       puts "Thank you for using EDM Festival Finder, Goodbye."
+      exit
     end
   end
 
