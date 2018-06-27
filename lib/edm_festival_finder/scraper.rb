@@ -46,7 +46,7 @@ class EdmFestivalFinder::Scraper
       environment: doc.css("col-xs-auto.col-sm-auto.nopadding.disc").text,
       type_of_event: doc.css(".col-xs-auto.col-sm-auto.nopadding.nomarginright.disc").text,
       link: link,
-      facebook: doc.css(".col-xs-12.nopadding.link a").attribute("href").value
+      facebook: doc.xpath("//div[contains(@class, 'col-xs-12 nopadding link')]/a[contains(@href,'facebook')]").first.text
     }
   end
 

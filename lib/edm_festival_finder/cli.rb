@@ -104,7 +104,7 @@ class EdmFestivalFinder::CLI
     self.back_or_exit(input, 3)
   end
 
-  def back_or_exit(input, go_to = 1)
+  def back_or_exit(input, go_to = 1) #verifies input for 'back' or 'exit' and routes user to the correct screen. When input is back, the go_to values are: 1 = main screen, 2 = choose_country, 3 = display_festivals.
     if input == 'back'
       if go_to == 1
         self.call
