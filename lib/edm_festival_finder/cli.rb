@@ -39,6 +39,7 @@ class EdmFestivalFinder::CLI
     while country_hash.none? {|country,code| self.country_code == code}     #re-prompts if the country code until the country code is one from the list provided
       puts "Country code was not invalid, please re-enter."
       self.country_code = gets.strip    #resets @country_code to correct input
+      self.back_or_exit(self.country_code, 1)
     end
     puts "Searching, please wait, this may take a minute."    #tells user to wait as the festivals are being retrieved by #get_festivals
     self.get_festivals
@@ -104,7 +105,7 @@ class EdmFestivalFinder::CLI
     self.back_or_exit(input, 3)
   end
 
-  def back_or_exit(input, go_to = 1) #verifies input for 'back' or 'exit' and routes user to the correct screen. When input is back, the go_to values are: 1 = main screen, 2 = choose_country, 3 = display_festivals.
+  def back_or_exit(input, go_to) #verifies input for 'back' or 'exit' and routes user to the correct screen. When input is back, the go_to values are: 1 = main screen, 2 = choose_country, 3 = display_festivals.
     if input == 'back'
       if go_to == 1
         self.call
