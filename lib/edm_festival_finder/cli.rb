@@ -37,7 +37,7 @@ class EdmFestivalFinder::CLI
     self.country_code = gets.strip    #sets @country_code to input
     self.back_or_exit(self.country_code, 1)
     while country_hash.none? {|country,code| self.country_code == code}     #re-prompts if the country code until the country code is one from the list provided
-      puts "Country code was not invalid, please re-enter."
+      puts "Country code was not valid, please re-enter."
       self.country_code = gets.strip    #resets @country_code to correct input
       self.back_or_exit(self.country_code, 1)
     end
