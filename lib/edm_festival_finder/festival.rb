@@ -1,7 +1,7 @@
 class EdmFestivalFinder::Festival
   @@all = []
 
-  attr_accessor :name, :country, :startdate, :enddate, :environment, :attendance, :confirmed_acts, :type_of_event, :individual_page, :link, :facebook
+  attr_accessor :name, :country_code, :country, :startdate, :enddate, :environment, :attendance, :confirmed_acts, :type_of_event, :individual_page, :link, :facebook
 
   def initialize(festival_hash)     #initializes with a hash, sets instance variables and adds self to @@all
     festival_hash.each do |attribute, value|

@@ -1,6 +1,6 @@
 class EdmFestivalFinder::CLI
 
-  attr_accessor :startdate, :enddate, :country_code, :festival_count, :festival_num
+  attr_accessor :startdate, :enddate, :country_code, :festival_count, :festival_num, :current_festivals
 
   def initialize #new instance sets the start date to the current date and end date a year from the current date
     self.startdate = Date.today.to_s
@@ -50,7 +50,7 @@ class EdmFestivalFinder::CLI
   end
 
   def get_festivals
-    if Festival.all.any? {|festival| festival[country_code:] == self.country_code}
+    if EdmFestivalFinder::Festival.all.find {|festival| festival.country_code == self.country_code}
       self.display_festivals
     else
       #scrapes the search results from searching the website with filters: @country_code, @startdate and @enddate
@@ -69,7 +69,9 @@ class EdmFestivalFinder::CLI
 
   def display_festivals     #displays a numbered list of festivals and some details
     self.festival_count = 0
-    EdmFestivalFinder::Festival.all.each do |festival|
+    #binding.pry
+    self.current_festivals = EdmFestivalFinder::Festival.all.select {|festival| festival if festival.country_code == self.country_code}
+    self.current_festivals.each do |festival|
       self.festival_count +=1
       puts "#{self.festival_count}. #{festival.name}"
       puts "  #{festival.country}, #{festival.startdate} - #{festival.enddate} (dd/mm/yy)"
@@ -94,15 +96,15 @@ class EdmFestivalFinder::CLI
 
   def festival_details    #puts out the festival instance variables of EdmFestivalFinder::Festival.all[@festival_num]
     puts ""
-    puts "Name: #{EdmFestivalFinder::Festival.all[self.festival_num].name}"
-    puts "Country: #{EdmFestivalFinder::Festival.all[self.festival_num].country}"
-    puts "Date: #{EdmFestivalFinder::Festival.all[self.festival_num].startdate} - #{EdmFestivalFinder::Festival.all[self.festival_num].enddate}"
-    puts "Confirmed acts: #{EdmFestivalFinder::Festival.all[self.festival_num].confirmed_acts}"
-    puts "Attendance: #{EdmFestivalFinder::Festival.all[self.festival_num].attendance}"
-    puts "Environment: #{EdmFestivalFinder::Festival.all[self.festival_num].environment}"
-    puts "Type of event: #{EdmFestivalFinder::Festival.all[self.festival_num].type_of_event}"
-    puts "Link: #{EdmFestivalFinder::Festival.all[self.festival_num].link}"
-    puts "Facebook: #{EdmFestivalFinder::Festival.all[self.festival_num].facebook}"
+    puts "Name: #{self.current_festivals[self.festival_num].name}"
+    puts "Country: #{self.current_festivals[self.festival_num].country}"
+    puts "Date: #{self.current_festivals[self.festival_num].startdate} - #{EdmFestivalFinder::Festival.all[self.festival_num].enddate}"
+    puts "Confirmed acts: #{self.current_festivals[self.festival_num].confirmed_acts}"
+    puts "Attendance: #{self.current_festivals[self.festival_num].attendance}"
+    puts "Environment: #{self.current_festivals[self.festival_num].environment}"
+    puts "Type of event: #{self.current_festivals[self.festival_num].type_of_event}"
+    puts "Link: #{self.current_festivals[self.festival_num].link}"
+    puts "Facebook: #{self.current_festivals[self.festival_num].facebook}"
     puts ""
     puts "Type 'back' to go to the festival list or 'exit'"
     input = gets.strip
