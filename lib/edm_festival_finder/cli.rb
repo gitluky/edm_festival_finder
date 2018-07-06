@@ -50,17 +50,21 @@ class EdmFestivalFinder::CLI
   end
 
   def get_festivals
-    #scrapes the search results from searching the website with filters: @country_code, @startdate and @enddate
-    search_results = EdmFestivalFinder::Scraper.scrape_festivals(self.country_code, self.startdate, self.enddate)
-    if search_results == []
-      self.choose_country(self.no_results_found) {|x| puts x}     #yields #no_results_found if scrape returns an empty array
+    if Festival.all.any? {|festival| festival[country_code:] == self.country_code}
+      self.display_festivals
     else
-      EdmFestivalFinder::Festival.create_from_search(search_results)     #creates festivals from the array of festival hashes returned from the scrape
-      EdmFestivalFinder::Festival.all.each do |festival|     #for each festival object, the instance variables are set from a hash created scraped from festival.individual_page
-        festival.add_additional_details(EdmFestivalFinder::Scraper.scrape_individual_festivals(festival.individual_page))
+      #scrapes the search results from searching the website with filters: @country_code, @startdate and @enddate
+      search_results = EdmFestivalFinder::Scraper.scrape_festivals(self.country_code, self.startdate, self.enddate)
+      if search_results == []
+        self.choose_country(self.no_results_found) {|x| puts x}     #yields #no_results_found if scrape returns an empty array
+      else
+        EdmFestivalFinder::Festival.create_from_search(search_results)     #creates festivals from the array of festival hashes returned from the scrape
+        EdmFestivalFinder::Festival.all.each do |festival|     #for each festival object, the instance variables are set from a hash created scraped from festival.individual_page
+          festival.add_additional_details(EdmFestivalFinder::Scraper.scrape_individual_festivals(festival.individual_page))
+        end
       end
+      self.display_festivals
     end
-    self.display_festivals
   end
 
   def display_festivals     #displays a numbered list of festivals and some details
@@ -110,7 +114,7 @@ class EdmFestivalFinder::CLI
       if go_to == 1
         self.call
       elsif go_to == 2
-        EdmFestivalFinder::Festival.reset_all
+        #EdmFestivalFinder::Festival.reset_all
         choose_country
       elsif go_to == 3
         display_festivals

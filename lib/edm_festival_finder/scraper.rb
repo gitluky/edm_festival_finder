@@ -2,9 +2,9 @@ class EdmFestivalFinder::Scraper
 
   def self.scrape_countries    #scrapes and creates a hash { country: code, ...} from the dropdown list of countries on the website
     url = "http://www.electronic-festivals.com"
-    doc = Nokogiri::HTML(open(url))
+    @@doc ||= Nokogiri::HTML(open(url))
     country_hash = {}
-    doc.css(".location_auto_country option").each do |country|
+    @@doc.css(".location_auto_country option").each do |country|
       country_hash[country.text.to_sym]=country.attribute("value").value
     end
     country_hash
@@ -21,6 +21,7 @@ class EdmFestivalFinder::Scraper
     festival_blocks.each do |festival|
       array_of_festivals << {
         name: festival.css("h3 a").text,
+        country_code: country_code,
         country: festival.css(".country-name").text,
         startdate: festival.css(".date-display-start").text,
         enddate: festival.css(".date-display-end").text,

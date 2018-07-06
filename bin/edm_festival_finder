@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
 require_relative '../lib/edm_festival_finder'
-require 'nokogiri'
-require 'open-uri'
 
 EdmFestivalFinder::CLI.new.call
